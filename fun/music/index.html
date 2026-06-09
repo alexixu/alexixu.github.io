@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>音律的乐趣 | Alex' Blog</title>
+  <meta name="description" content="从“丝不如竹，竹不如肉”说起，写一点音律的乐趣。">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0ZYYDK6Z5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-J0ZYYDK6Z5");
+  </script>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-solid: #ffffff;
+      --panel-soft: rgba(248, 250, 252, 0.86);
+      --ink: #344054;
+      --heading: #101828;
+      --muted: #667085;
+      --line: rgba(148, 163, 184, 0.22);
+      --accent: #2563eb;
+      --accent-strong: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.1);
+      --warm: #b45309;
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.09);
+      --link: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(246, 247, 251, 0.3), #f7f8fb 520px),
+        url("/images/home/editorial-desk-bg.png") center top / 1680px auto no-repeat,
+        var(--bg);
+      font-family: Lato, "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(880px, calc(100% - 44px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 32px 0 22px;
+      font-size: 14px;
+    }
+
+    .brand {
+      color: var(--heading);
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 12px 34px rgba(15, 23, 42, 0.07);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav a {
+      min-width: 72px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      color: #475467;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .nav a:hover,
+    .nav a[aria-current="page"] {
+      color: #ffffff;
+      background: var(--accent);
+    }
+
+    .hero {
+      display: flex;
+      justify-content: center;
+      padding: 78px 0 58px;
+    }
+
+    .hero-inner {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 46px 52px;
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--heading);
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 650px;
+      margin: 22px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    main {
+      padding: 8px 0 76px;
+    }
+
+    .section {
+      padding: 38px 0;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0 0 20px;
+      color: var(--heading);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+
+    p {
+      margin: 0 0 18px;
+      font-size: 16px;
+    }
+
+    .pleasure-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .pleasure-item {
+      min-height: 150px;
+      padding: 20px;
+      border-radius: 8px;
+      background: var(--panel-solid);
+      box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
+    }
+
+    .pleasure-item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--heading);
+      font-size: 17px;
+      font-weight: 500;
+    }
+
+    .pleasure-item span {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .practice-note {
+      margin-top: 24px;
+      padding-left: 16px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .practice-note h3 {
+      margin: 0 0 10px;
+      color: var(--heading);
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+
+    .practice-note p {
+      margin-bottom: 0;
+    }
+
+    .quote {
+      display: inline-block;
+      max-width: 100%;
+      margin: 2px 0 22px;
+      padding: 10px 14px;
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      background: var(--panel-solid);
+      color: var(--heading);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .story-figure {
+      margin: 0 0 26px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--panel-solid);
+      box-shadow: 0 20px 54px rgba(15, 23, 42, 0.08);
+    }
+
+    .story-figure img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 8.6;
+      object-fit: cover;
+    }
+
+    .note-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .sound-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 2px 0 18px;
+    }
+
+    .sound-toolbar p {
+      margin: 0;
+    }
+
+    .sequence-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      min-height: 42px;
+      min-width: 142px;
+      padding: 8px 18px;
+      border: 0;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--accent);
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .sequence-button:hover {
+      background: var(--accent-strong);
+    }
+
+    .play-icon {
+      position: relative;
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid var(--accent);
+    }
+
+    .play-icon-light {
+      border-left-color: #ffffff;
+    }
+
+    .sequence-button:disabled {
+      cursor: default;
+      opacity: 0.68;
+    }
+
+    .three {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .sound-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 226px;
+      padding: 20px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--panel-solid);
+      box-shadow: 0 16px 44px rgba(15, 23, 42, 0.07);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .sound-card:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.25);
+      outline-offset: 3px;
+    }
+
+    .sound-card:hover,
+    .sound-card.is-playing {
+      transform: translateY(-2px);
+      background: #f8fbff;
+      box-shadow: 0 20px 54px rgba(37, 99, 235, 0.13);
+    }
+
+    .sound-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .sound-card strong {
+      display: block;
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .sound-card em {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--warm);
+      font-size: 13px;
+      font-style: normal;
+      line-height: 1.45;
+    }
+
+    .sound-card span {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .sound-copy {
+      flex: 1;
+    }
+
+    .card-play-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      min-height: 38px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .card-play-button:hover {
+      background: rgba(37, 99, 235, 0.16);
+    }
+
+    .sound-status {
+      min-height: 28px;
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .ending {
+      max-width: 720px;
+      margin: 30px auto 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100% - 28px, 960px);
+      }
+
+      .topbar,
+      .section,
+      .sound-toolbar,
+      .pleasure-grid,
+      .three {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        width: 100%;
+        border-radius: 18px;
+      }
+
+      .nav a {
+        flex: 1 1 88px;
+      }
+
+      .hero {
+        padding: 38px 0 32px;
+      }
+
+      .hero-inner {
+        padding: 30px 24px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      h2 {
+        font-size: 21px;
+      }
+
+      .section {
+        gap: 14px;
+        padding: 30px 0;
+      }
+
+      .sound-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .sequence-button {
+        width: auto;
+        max-width: 100%;
+      }
+
+      .quote {
+        padding: 9px 12px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="brand" href="/">Alex' Blog</a>
+    <nav class="nav" aria-label="主导航">
+      <a href="/">首页</a>
+      <a href="/fun/" aria-current="page">乐趣</a>
+      <a href="/categories/NLP/">AI</a>
+      <a href="/categories/机器学习/">机器学习</a>
+      <a href="/categories/python/">Python</a>
+    </nav>
+  </header>
+
+  <section class="shell hero">
+    <div class="hero-inner">
+      <p class="eyebrow">乐趣 / 音律</p>
+      <h1>音律的乐趣</h1>
+      <p class="lead">从“丝不如竹，竹不如肉”说起：好听不只在音准，也在材料、气息和身体一步步靠近自然的过程里。</p>
+    </div>
+  </section>
+
+  <main class="shell">
+    <section class="section">
+      <h2>乐趣和美</h2>
+      <div>
+        <p>音律的乐趣，先不必从高深处说起。它像一套很小的游戏规则：几个音、几种节拍、一些重复和变化，就能让人听见晴朗、犹豫、紧张、落定。它的美也正在这里：声音一边有数学式的秩序，一边又能直接碰到情绪。</p>
+        <div class="pleasure-grid">
+          <div class="pleasure-item">
+            <strong>1. 最直观：像搭积木，也像解密码</strong>
+            <span>音阶里的音并不多，却可以组合出无穷多的走向。两个音一靠近，关系就变了；三个音叠在一起，可能明亮，也可能阴郁。好玩之处在于：你改动很少，气氛却立刻换了。</span>
+          </div>
+          <div class="pleasure-item">
+            <strong>2. 最深层：理性和情感同时在场</strong>
+            <span>八度、五度这些关系背后有清楚的比例，和声的推进也有可分析的结构。但人听到它时，并不会只觉得“正确”，而会觉得舒展、悬住、回家，或者忽然被某种情绪击中。</span>
+          </div>
+          <div class="pleasure-item">
+            <strong>3. 进阶乐趣：听懂之后，声音会变立体</strong>
+            <span>一开始只是觉得好听；后来听见旋律在重复、变形、回应，听见声部之间像在对话，音乐就不再是一条线，而像一个正在展开的空间。懂一点规则，反而更能听见自由。</span>
+          </div>
+        </div>
+        <div class="practice-note">
+          <h3>一个小练习：只改一个音</h3>
+          <p>在心里哼一段上行音阶，再把某个稳定的音轻轻降下去，你会发现世界忽然暗了一点。音律迷人的地方就是这样：最小的变化，能打开最大的感受。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>典故与解释</h2>
+      <div>
+        <div class="quote">丝不如竹，竹不如肉。</div>
+        <figure class="story-figure">
+          <img src="/images/fun/music-story.png" alt="文人雅集，琴、竹笛与歌声相伴的插画">
+        </figure>
+        <p>这句话常追到魏晋人物孟嘉的故事。桓温问他：听歌舞伎乐，为什么说丝弦不如竹管，竹管又不如人的歌喉？孟嘉答得很短：“渐近自然。”这里的“自然”，不是说乐器不自然，而是说声音越靠近身体，里面保留的“人”的痕迹越多，也就越容易动人。</p>
+        <p>“丝”是琴瑟一类弦乐。它当然美，但中间隔着手指、弦、琴身和共鸣箱：手指拨弦，弦再振动，琴身把声音放出来。它的美偏精细，偏可控制，像把情绪刻在一根线上。</p>
+        <p>“竹”是箫笛一类管乐，比弦乐更近一步。它不只是手的动作，还要靠气。气一进去，声音就有了呼吸的长短、强弱、急缓；你会听见一点人的气息节奏：这一口气够不够长，转音是不是稳，停顿是不是像叹息。</p>
+        <p>到了“肉”，也就是人声，就更直接了。人声不是把情绪交给器物转述，而是身体自己在发声。喉咙、胸腔、口腔、鼻腔、咬字、气息，甚至一点紧张、一点颤动，都会进到声音里。它不一定最精确，却最难伪装。</p>
+        <p>所以说“肉”更美，不是说人声永远高于乐器，而是说它更贴近情感的源头。越靠近身体，声音越不只是“音”，而像一个人在场。就像看字迹：打印体可以很工整，毛笔字更有手腕的力度，而一个人匆忙写下的一句话，可能歪一点、乱一点，却有当时那个人的呼吸和心情。美不只来自完美，也来自真实的痕迹。</p>
+        <p>把这个对比放回前面的两个核心，也就更清楚了：丝把“秩序中的自由”做得很细，弦的长短、松紧、回弹，都让情绪进入一条可控制的线；竹让秩序开始带上呼吸，一口气怎么进、在哪里换、何时断开，都会制造期待；肉则把“情感的共振”推到最前面，发声者的气息、咬字、颤动和细小的不稳定，直接成为声音的一部分。丝、竹、肉不是互相淘汰，而是在不同距离上安排美。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3种声音</h2>
+      <div>
+        <div class="sound-toolbar">
+          <p class="note-text">每种声音会播放一段更连续的旋律；顺序播放会依次播放丝、竹、肉，中间停 2 秒。</p>
+          <button class="sequence-button" type="button" data-sequence><span class="play-icon play-icon-light" aria-hidden="true"></span>顺序播放</button>
+        </div>
+        <div class="three">
+          <article class="sound-card" data-sound="silk" role="button" tabindex="0" aria-label="播放丝的声音">
+            <div class="sound-card-header">
+              <strong>丝</strong>
+              <span class="play-icon" aria-hidden="true"></span>
+            </div>
+            <div class="sound-copy">
+              <em>弦振，带一点手指的颗粒。</em>
+              <span>声音像一根线，被按、揉、挑、抹拉出细密的表情。</span>
+            </div>
+            <button class="card-play-button" type="button"><span class="play-icon" aria-hidden="true"></span>播放丝声</button>
+          </article>
+          <article class="sound-card" data-sound="bamboo" role="button" tabindex="0" aria-label="播放竹的声音">
+            <div class="sound-card-header">
+              <strong>竹</strong>
+              <span class="play-icon" aria-hidden="true"></span>
+            </div>
+            <div class="sound-copy">
+              <em>气入管，音色更通透。</em>
+              <span>竹声靠呼吸站起来，像人在远处说话、叹息或召唤。</span>
+            </div>
+            <button class="card-play-button" type="button"><span class="play-icon" aria-hidden="true"></span>播放竹声</button>
+          </article>
+          <article class="sound-card" data-sound="voice" role="button" tabindex="0" aria-label="播放肉的声音">
+            <div class="sound-card-header">
+              <strong>肉</strong>
+              <span class="play-icon" aria-hidden="true"></span>
+            </div>
+            <div class="sound-copy">
+              <em>声从身体里出来。</em>
+              <span>它不必先变成器物的振动，就能把情绪送到另一个人那里。</span>
+            </div>
+            <button class="card-play-button" type="button"><span class="play-icon" aria-hidden="true"></span>播放人声</button>
+          </article>
+        </div>
+        <p class="sound-status" aria-live="polite">准备好了。点击任意一种声音试试。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>乐趣所在</h2>
+      <div>
+        <p>真正有意思的地方，不是把三种声音分出胜负，而是听它们各自怎么带着人。弦乐让情绪变得精细，管乐让气息有了形状，人声则把语言和旋律放在同一个身体里。</p>
+        <p>一段旋律令人难忘，往往不是因为它证明了什么，而是因为它让人忽然觉得：原来心里那个说不清的东西，可以被这样弹出来、吹出来，或者唱出来。</p>
+      </div>
+    </section>
+
+    <p class="ending">这篇先写到这里。后面可以继续沿着“乐趣”往外长：器物的手感、文字的声调、游戏的节奏，或者任何值得慢慢玩的东西。</p>
+  </main>
+
+  <script>
+    const labels = {
+      silk: "丝：弦声",
+      bamboo: "竹：管声",
+      voice: "肉：人声"
+    };
+
+    const audioSources = {
+      silk: "/audio/fun/music-silk.wav",
+      bamboo: "/audio/fun/music-bamboo.wav",
+      voice: "/audio/fun/music-voice.wav"
+    };
+    const sequenceOrder = ["silk", "bamboo", "voice"];
+    const sequenceGapMs = 2000;
+
+    const cards = Array.from(document.querySelectorAll("[data-sound]"));
+    const status = document.querySelector(".sound-status");
+    const sequenceButton = document.querySelector("[data-sequence]");
+    const audios = Object.fromEntries(
+      Object.entries(audioSources).map(([key, src]) => {
+        const audio = new Audio(src);
+        audio.preload = "auto";
+        return [key, audio];
+      })
+    );
+    let activeAudio = null;
+    let isPlaying = false;
+
+    function setActive(kind, active) {
+      cards.forEach((card) => {
+        card.classList.toggle("is-playing", active && card.dataset.sound === kind);
+      });
+    }
+
+    function setControlsDisabled(disabled) {
+      sequenceButton.disabled = disabled;
+      cards.forEach((card) => {
+        card.setAttribute("aria-disabled", disabled ? "true" : "false");
+        const playButton = card.querySelector(".card-play-button");
+        playButton.disabled = disabled;
+      });
+    }
+
+    function resetPlayback() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+      }
+      activeAudio = null;
+      isPlaying = false;
+      setControlsDisabled(false);
+      setActive(null, false);
+    }
+
+    function wait(ms) {
+      return new Promise((resolve) => {
+        window.setTimeout(resolve, ms);
+      });
+    }
+
+    function playAudio(audio) {
+      return new Promise((resolve, reject) => {
+        function cleanup() {
+          audio.removeEventListener("ended", handleEnded);
+          audio.removeEventListener("error", handleError);
+        }
+
+        function handleEnded() {
+          cleanup();
+          resolve();
+        }
+
+        function handleError() {
+          cleanup();
+          reject(new Error("Audio playback failed."));
+        }
+
+        audio.addEventListener("ended", handleEnded);
+        audio.addEventListener("error", handleError);
+        audio.play().catch((error) => {
+          cleanup();
+          reject(error);
+        });
+      });
+    }
+
+    async function playTrack(trackKey) {
+      if (isPlaying) return;
+      const audio = audios[trackKey];
+      if (!audio) return;
+
+      isPlaying = true;
+      setControlsDisabled(true);
+      activeAudio = audio;
+      audio.currentTime = 0;
+      setActive(trackKey, true);
+      status.textContent = `正在播放 ${labels[trackKey]}。`;
+
+      try {
+        await playAudio(audio);
+        resetPlayback();
+        status.textContent = `${labels[trackKey]} 播放完了。`;
+      } catch (error) {
+        resetPlayback();
+        status.textContent = "浏览器暂时没有允许播放声音，请再点一次。";
+      }
+    }
+
+    function playSound(kind) {
+      playTrack(kind);
+    }
+
+    cards.forEach((card) => {
+      const playButton = card.querySelector(".card-play-button");
+
+      card.addEventListener("click", (event) => {
+        if (event.target.closest(".card-play-button")) return;
+        playSound(card.dataset.sound);
+      });
+
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          playSound(card.dataset.sound);
+        }
+      });
+
+      playButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        playSound(card.dataset.sound);
+      });
+    });
+
+    async function playSequence() {
+      if (isPlaying) return;
+
+      isPlaying = true;
+      setControlsDisabled(true);
+      status.textContent = "正在顺序播放丝、竹、肉。";
+
+      try {
+        for (const [index, trackKey] of sequenceOrder.entries()) {
+          const audio = audios[trackKey];
+          activeAudio = audio;
+          audio.currentTime = 0;
+          setActive(trackKey, true);
+          status.textContent = `正在播放 ${labels[trackKey]}。`;
+          await playAudio(audio);
+
+          if (index < sequenceOrder.length - 1) {
+            setActive(null, false);
+            const nextKey = sequenceOrder[index + 1];
+            status.textContent = `停 2 秒，接着播放 ${labels[nextKey]}。`;
+            await wait(sequenceGapMs);
+          }
+        }
+
+        resetPlayback();
+        status.textContent = "三种声音播放完了。";
+      } catch (error) {
+        resetPlayback();
+        status.textContent = "浏览器暂时没有允许播放声音，请再点一次。";
+      }
+    }
+
+    sequenceButton.addEventListener("click", () => {
+      playSequence();
+    });
+  </script>
+</body>
+</html>

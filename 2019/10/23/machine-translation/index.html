@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"alexixu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="背景介绍机器翻译在神经网络之后得到了长足的发展。随着国际化的趋势，机器翻译在加强国际交流中的作用日益明显。本文将介绍一下基于最新的神经网络翻译架构Transformer来完成双语翻译。 Transformer架构结构图Transformer架构图如下，总体可以分为两部分，编码器和解码器（Encoder和Decoder）。编码器和解码器分别有两种基本单元堆叠而成。基本单元又主要分为两种模块，Mult">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络机器翻译实践">
+<meta property="og:url" content="https://alexixu.github.io/2019/10/23/machine-translation/index.html">
+<meta property="og:site_name" content="Alex&#39; Blog">
+<meta property="og:description" content="背景介绍机器翻译在神经网络之后得到了长足的发展。随着国际化的趋势，机器翻译在加强国际交流中的作用日益明显。本文将介绍一下基于最新的神经网络翻译架构Transformer来完成双语翻译。 Transformer架构结构图Transformer架构图如下，总体可以分为两部分，编码器和解码器（Encoder和Decoder）。编码器和解码器分别有两种基本单元堆叠而成。基本单元又主要分为两种模块，Mult">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alexixu.github.io/2019/10/23/machine-translation/image-20191023191818320.png">
+<meta property="article:published_time" content="2019-10-23T11:19:37.000Z">
+<meta property="article:modified_time" content="2026-06-09T17:36:54.687Z">
+<meta property="article:author" content="Alexixu">
+<meta property="article:tag" content="programming">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://alexixu.github.io/2019/10/23/machine-translation/image-20191023191818320.png">
+
+
+<link rel="canonical" href="https://alexixu.github.io/2019/10/23/machine-translation/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://alexixu.github.io/2019/10/23/machine-translation/","path":"2019/10/23/machine-translation/","title":"神经网络机器翻译实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>神经网络机器翻译实践 | Alex' Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0ZYYDK6Z5"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-J0ZYYDK6Z5","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Alex' Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Alex' Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section">首页</a></li><li class="menu-item menu-item-乐趣"><a href="/fun/" rel="section">乐趣</a></li><li class="menu-item menu-item-ai"><a href="/categories/NLP/" rel="section">AI</a></li><li class="menu-item menu-item-机器学习"><a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="section">机器学习</a></li><li class="menu-item menu-item-python"><a href="/categories/python/" rel="section">Python</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">Transformer架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">结构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-wise-Feed-Forward-Network"><span class="nav-number">2.2.</span> <span class="nav-text">Position-wise Feed Forward Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-Encoding"><span class="nav-number">2.3.</span> <span class="nav-text">Position Encoding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%AF%B9%E7%BC%96%E7%A0%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">相对编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9D%E5%AF%B9%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81"><span class="nav-number">2.3.2.</span> <span class="nav-text">绝对位置编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E8%80%85%E6%AF%94%E8%BE%83"><span class="nav-number">2.3.3.</span> <span class="nav-text">二者比较</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mask%E6%9C%BA%E5%88%B6"><span class="nav-number">2.4.</span> <span class="nav-text">Mask机制</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Alexixu</p>
+  <div class="site-description" itemprop="description">Regular Life, Happy Coding.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://alexixu.github.io/2019/10/23/machine-translation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alexixu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Alex' Blog">
+      <meta itemprop="description" content="Regular Life, Happy Coding.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="神经网络机器翻译实践 | Alex' Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          神经网络机器翻译实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-23 19:19:37" itemprop="dateCreated datePublished" datetime="2019-10-23T19:19:37+08:00">2019-10-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-10 01:36:54" itemprop="dateModified" datetime="2026-06-10T01:36:54+08:00">2026-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>机器翻译在神经网络之后得到了长足的发展。随着国际化的趋势，机器翻译在加强国际交流中的作用日益明显。本文将介绍一下基于最新的神经网络翻译架构Transformer来完成双语翻译。</p>
+<h2 id="Transformer架构"><a href="#Transformer架构" class="headerlink" title="Transformer架构"></a>Transformer架构</h2><h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p>Transformer架构图如下，总体可以分为两部分，编码器和解码器（Encoder和Decoder）。编码器和解码器分别有两种基本单元堆叠而成。基本单元又主要分为两种模块，Multi-Head Attention和Feed Forward Network。</p>
+<img src="/2019/10/23/machine-translation/image-20191023191818320.png" class="">
+
+<p>###Multi-Head Attention</p>
+<p>首先说一下Attention，可以简单用下面一个公式说明白：<br>$$<br>Attention(Q,K,V) &#x3D; softmax(\frac{QK^T}{\sqrt{d_k}})V<br>$$<br>这边采用$\sqrt{d_k}$进行缩放，因为当两个纬度增加时，向量的点基也会增大。</p>
+<p>Multi Head Attention的过程就是先将Q，K，V映射到不同的子空间当中，再对不同的子空间做Attention，然后将结果联合起来，再通过一层全连接网络得到最后结果。<br>$$<br>MultiHead(Q,K,V) &#x3D; Concat(head_1, head_2…)W^o<br>\\<br>where\ head_i &#x3D; Attention(QW^q,KW^k,VW^v)<br>$$<br>其中， $W^q$,$W^k$,$W^v$的第二维度为各自初始维度d除以head数。</p>
+<h3 id="Position-wise-Feed-Forward-Network"><a href="#Position-wise-Feed-Forward-Network" class="headerlink" title="Position-wise Feed Forward Network"></a>Position-wise Feed Forward Network</h3><p>有点类似kernel size为1的卷积。对每个位置上的深度向量进行计算。</p>
+<h3 id="Position-Encoding"><a href="#Position-Encoding" class="headerlink" title="Position Encoding"></a>Position Encoding</h3><p>由于Attention机制，不能捕捉位置信息，需要将位置信息编码到输入向量当中。有相对编码和绝对编码两种方式。</p>
+<h4 id="相对编码"><a href="#相对编码" class="headerlink" title="相对编码"></a>相对编码</h4><p>相对编码是固定的，直接通过三角函数计算得到：<br>$$<br>PE(pos, 2i) &#x3D; sin(pos&#x2F;10000^{2i&#x2F;d_{model}})<br>$$</p>
+<p>$$<br>PE(pos, 2i+1)&#x3D;cos(pos&#x2F;10000^{2i&#x2F;d_{model}})<br>$$</p>
+<p>pos是位置编号，i是维度向量中的位置。之所以选择三角函数，因为对于PE(pos+k)，可以很容易通过PE(pos) 线性变换得到。</p>
+<h4 id="绝对位置编码"><a href="#绝对位置编码" class="headerlink" title="绝对位置编码"></a>绝对位置编码</h4><p>绝对位置编码比较简单，直接随机初始化一个embedding矩阵，直接在训练当中学习得到。</p>
+<h4 id="二者比较"><a href="#二者比较" class="headerlink" title="二者比较"></a>二者比较</h4><p>论文上说，基于机器翻译的实验来说，二者性能上几乎没有区别。然后，选择了相对位置编码，因为作者认为，模型可以在位置长度超出训练集case的情况下，得到一个比较合适的位置向量。</p>
+<h3 id="Mask机制"><a href="#Mask机制" class="headerlink" title="Mask机制"></a>Mask机制</h3><p>由于这边使用Attention，采用的是定长的结构，所以一般来说，会设一个最大长度，那么训练集当中会出现很多pad。期望的是在输入的时候，能够通过mask机制，将pad的向量在注意力机制中的权重为0。实现方式为修改attention权重矩阵，将mask的权重设置为一个超小的负数，使得算softmax时权重很小。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/12/dive-into-bilstm-crf/" rel="prev" title="深度理解Bi-LSTM+CRF网络">
+                  <i class="fa fa-angle-left"></i> 深度理解Bi-LSTM+CRF网络
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/27/reinforcement-learning01/" rel="next" title="强化学习读书笔记">
+                  强化学习读书笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alexixu</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"alexixu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="问题：virtualenv activate 后失效问题描述Virtualenv 经常用于python环境的隔离，但有时候执行了activate命令，终端显示已经进入对应环境（终端前面会显示环境名称）。此时，执行python会发现并没有使用对应环境下的python解释器，而是调用的系统的python解释器。 导致原因执行source activate 其实是加载activate这个脚本，打开脚本可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="virtualenv失效原因">
+<meta property="og:url" content="https://alexixu.github.io/2018/06/23/virtualenv%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0/index.html">
+<meta property="og:site_name" content="Alex&#39; Blog">
+<meta property="og:description" content="问题：virtualenv activate 后失效问题描述Virtualenv 经常用于python环境的隔离，但有时候执行了activate命令，终端显示已经进入对应环境（终端前面会显示环境名称）。此时，执行python会发现并没有使用对应环境下的python解释器，而是调用的系统的python解释器。 导致原因执行source activate 其实是加载activate这个脚本，打开脚本可">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-06-23T10:22:00.000Z">
+<meta property="article:modified_time" content="2026-06-09T17:36:54.689Z">
+<meta property="article:author" content="Alexixu">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://alexixu.github.io/2018/06/23/virtualenv%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://alexixu.github.io/2018/06/23/virtualenv%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0/","path":"2018/06/23/virtualenv失效原因/","title":"virtualenv失效原因"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>virtualenv失效原因 | Alex' Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0ZYYDK6Z5"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-J0ZYYDK6Z5","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Alex' Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Alex' Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section">首页</a></li><li class="menu-item menu-item-乐趣"><a href="/fun/" rel="section">乐趣</a></li><li class="menu-item menu-item-ai"><a href="/categories/NLP/" rel="section">AI</a></li><li class="menu-item menu-item-机器学习"><a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="section">机器学习</a></li><li class="menu-item menu-item-python"><a href="/categories/python/" rel="section">Python</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9Avirtualenv-activate-%E5%90%8E%E5%A4%B1%E6%95%88"><span class="nav-number">1.</span> <span class="nav-text">问题：virtualenv activate 后失效</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E8%87%B4%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.2.</span> <span class="nav-text">导致原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-number">1.3.</span> <span class="nav-text">问题解决</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Alexixu</p>
+  <div class="site-description" itemprop="description">Regular Life, Happy Coding.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://alexixu.github.io/2018/06/23/virtualenv%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alexixu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Alex' Blog">
+      <meta itemprop="description" content="Regular Life, Happy Coding.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="virtualenv失效原因 | Alex' Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          virtualenv失效原因
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-06-23 18:22:00" itemprop="dateCreated datePublished" datetime="2018-06-23T18:22:00+08:00">2018-06-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-10 01:36:54" itemprop="dateModified" datetime="2026-06-10T01:36:54+08:00">2026-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="问题：virtualenv-activate-后失效"><a href="#问题：virtualenv-activate-后失效" class="headerlink" title="问题：virtualenv activate 后失效"></a>问题：virtualenv activate 后失效</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>Virtualenv 经常用于python环境的隔离，但有时候执行了activate命令，终端显示已经进入对应环境（终端前面会显示环境名称）。此时，执行python会发现并没有使用对应环境下的python解释器，而是调用的系统的python解释器。</p>
+<h3 id="导致原因"><a href="#导致原因" class="headerlink" title="导致原因"></a>导致原因</h3><p>执行source activate 其实是加载activate这个脚本，打开脚本可以看到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">VIRTUAL_ENV=<span class="string">&quot;/Users/someone/Documents/python_env/python3&quot;</span></span><br><span class="line"><span class="built_in">export</span> VIRTUAL_ENV</span><br><span class="line"></span><br><span class="line">_OLD_VIRTUAL_PATH=<span class="string">&quot;<span class="variable">$PATH</span>&quot;</span></span><br><span class="line">PATH=<span class="string">&quot;<span class="variable">$VIRTUAL_ENV</span>/bin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH</span><br></pre></td></tr></table></figure>
+
+<p>上述脚本其实就是virtualenv 切换python环境的实现方式，通过在环境变量的最前面添加当前环境的python解释器的路径完成。需要注意的是，这个路径是在脚本中写死的，所以如果你将python环境的目录修改了，那么此时会将一个错误的python解释器路径添加到环境变量当中，当然也就找不到对应的解释器，于是系统会接着往下找，最后找到系统的解释器。</p>
+<h3 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h3><p>将VIRTUAL_ENV这个环境变量设置为正确的目录路径。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" rel="prev" title="机器学习-线性模型">
+                  <i class="fa fa-angle-left"></i> 机器学习-线性模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/09/30/clean-architecture-notes/" rel="next" title="架构整洁之道读书笔记">
+                  架构整洁之道读书笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alexixu</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

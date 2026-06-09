@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"alexixu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="线性模型1.基本形式线性模型的基本思想是通过属性或者特征的线性组合来预测的函数. 数学表达如下:   更通俗的向量表达为:   线性模型比较简单, 并且具有较好的解释性. 很多非线性模型实际上是通过将特征映射到高维空间当中或者通过引入层级结构来实现非线性模型.经典的线性模型有: 线性回归, 逻辑回归. 2. 线性回归基于已有数据集 D &#x3D; {(x1, y1 ) …, (xm, ym )}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习-线性模型">
+<meta property="og:url" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Alex&#39; Blog">
+<meta property="og:description" content="线性模型1.基本形式线性模型的基本思想是通过属性或者特征的线性组合来预测的函数. 数学表达如下:   更通俗的向量表达为:   线性模型比较简单, 并且具有较好的解释性. 很多非线性模型实际上是通过将特征映射到高维空间当中或者通过引入层级结构来实现非线性模型.经典的线性模型有: 线性回归, 逻辑回归. 2. 线性回归基于已有数据集 D &#x3D; {(x1, y1 ) …, (xm, ym )}">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_repress.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_vec_repress.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_learn_what.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_wb_target.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/wb_derivative.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_solution.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/b_solution.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_b_add.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_vec_solution.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_vector_solution.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_youjie.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/sigmoid.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_function.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_repress.gif">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/probability.gif">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/L_func_logistic_without_log.gif">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/L_func_logistic.gif">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_loss_function.png">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_solution.jpeg">
+<meta property="og:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/generative_model.png">
+<meta property="article:published_time" content="2017-09-24T13:09:53.000Z">
+<meta property="article:modified_time" content="2026-06-09T17:36:54.689Z">
+<meta property="article:author" content="Alexixu">
+<meta property="article:tag" content="机器学习 逻辑回归 线性回归">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_repress.png">
+
+
+<link rel="canonical" href="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/","path":"2017/09/24/线性模型/","title":"机器学习-线性模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器学习-线性模型 | Alex' Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0ZYYDK6Z5"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-J0ZYYDK6Z5","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Alex' Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Alex' Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section">首页</a></li><li class="menu-item menu-item-乐趣"><a href="/fun/" rel="section">乐趣</a></li><li class="menu-item menu-item-ai"><a href="/categories/NLP/" rel="section">AI</a></li><li class="menu-item menu-item-机器学习"><a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="section">机器学习</a></li><li class="menu-item menu-item-python"><a href="/categories/python/" rel="section">Python</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">线性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">1.基本形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">1.2.</span> <span class="nav-text">2. 线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">1.3.</span> <span class="nav-text">3.逻辑回归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#i-%E6%A8%A1%E5%9E%8B%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.3.1.</span> <span class="nav-text">i 模型表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ii-%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.2.</span> <span class="nav-text">ii 目标函数(损失函数)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iii-%E9%80%9A%E8%BF%87%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B1%82%E8%A7%A3"><span class="nav-number">1.3.3.</span> <span class="nav-text">iii 通过梯度下降求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iiii-%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">1.3.4.</span> <span class="nav-text">iiii 正则化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E5%AE%83"><span class="nav-number">1.4.</span> <span class="nav-text">4.其它</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Alexixu</p>
+  <div class="site-description" itemprop="description">Regular Life, Happy Coding.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://alexixu.github.io/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alexixu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Alex' Blog">
+      <meta itemprop="description" content="Regular Life, Happy Coding.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器学习-线性模型 | Alex' Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习-线性模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-24 21:09:53" itemprop="dateCreated datePublished" datetime="2017-09-24T21:09:53+08:00">2017-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-10 01:36:54" itemprop="dateModified" datetime="2026-06-10T01:36:54+08:00">2026-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="线性模型"><a href="#线性模型" class="headerlink" title="线性模型"></a>线性模型</h1><h2 id="1-基本形式"><a href="#1-基本形式" class="headerlink" title="1.基本形式"></a>1.基本形式</h2><p>线性模型的基本思想是通过属性或者特征的线性组合来预测的函数. 数学表达如下:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_repress.png" class="">
+
+<p>更通俗的向量表达为:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_vec_repress.png" class="">
+
+<p>线性模型比较简单, 并且具有较好的解释性. 很多非线性模型实际上是通过将特征映射到高维空间当中或者通过引入层级结构来实现非线性模型.<br>经典的线性模型有: 线性回归, 逻辑回归.</p>
+<h2 id="2-线性回归"><a href="#2-线性回归" class="headerlink" title="2. 线性回归"></a>2. 线性回归</h2><p>基于已有数据集 D &#x3D; {(x<sub>1</sub>, y<sub>1</sub> ) …, (x<sub>m</sub>, y<sub>m</sub> )}, 其中x为向量, 表示特征集合. y为实数. 线性回归会取学习到一个线性模型, 使得根据特征向量x, 可以尽可能精确的预测y. </p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_learn_what.png" class="">
+
+<p>为了确定模型中的参数w, b. 我们首先需要找到一个模型的性能度量. 在回归任务当中, 比较常用的衡量指标是: 均方误差. 这样, 目标函数便是最小化均方误差, 也叫做最小二乘法.<br>均方误差具有较好的几何意义, 它对应了常用的欧几里得距离. </p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/liner_model_wb_target.png" class="">
+
+<p>求解w和b的上述过程, 叫做 线性回归模型的最小二乘 “参数估计”.  由于上述函数是关于w和b的凸函数(这个地方我很好奇 为什么不是叫凹函数,从文字象形上来说 更像凹形状), 因为有这样的性质, 直接求导, 导数为0的点必是最优解, 也是上述函数的最小值点. </p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/wb_derivative.png" class="">
+
+<p>解得:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_solution.png" class="">
+
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/b_solution.png" class="">
+
+<p>计算机中, 利用矩阵可以通过并行计算加速, 矩阵形式的表示的求解如下:<br>首先为了计算, 做一点变化, 首先在x的特征向量当中添加一个常数项 1, 这样可以让b 添加w中.即:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_b_add.png" class="">
+
+<p>于是, 矩阵表示的目标函数为:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_vec_solution.png" class="">
+
+<p>对w求导可以得到:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_vector_solution.png" class="">
+
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/w_youjie.png" class="">
+
+<p>实际情况是, 由于样本数量较多, 并且 有误差的存在, X<sup>T</sup>X不是满秩矩阵, 这个时候可以通过引入正则化变量</p>
+<p>最后说一下广义线性模型, 即在输出的结果中, 使之成为一个可微函数的的输入. </p>
+<h2 id="3-逻辑回归"><a href="#3-逻辑回归" class="headerlink" title="3.逻辑回归"></a>3.逻辑回归</h2><h3 id="i-模型表示"><a href="#i-模型表示" class="headerlink" title="i 模型表示"></a>i 模型表示</h3><p>上述线性回归返回的是一个连续值, 那么在做进行分类任务的时候, 需要将连续值转换为0&#x2F;1值.<br>可以想到的是单位阶跃函数, 和 sigmoid函数. 这里利用广义线性模型, 将求得的连续值作为可微函数输入.<br>由于单位阶跃函数不可微, 所以一般都会选择sigmoid函数, 将输出的值, 记作z 转换为0 -1 之间的连续值.<br>sigmoid函数可以表示为:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/sigmoid.png" class="">
+
+<p>最后输出可以表示为:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_function.png" class="">
+
+<h3 id="ii-目标函数-损失函数"><a href="#ii-目标函数-损失函数" class="headerlink" title="ii 目标函数(损失函数)"></a>ii 目标函数(损失函数)</h3><p>经过转换后, 我们可以将y的值看作样本为正例的概率, 将1 - y 看作样本为负例的概率. 然后通过”极大似然法”来对参数w和b进行估计.</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_repress.gif" class="">
+
+<p>这里用theta将w和b 一起表示<br>单个样本的概率表示为:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/probability.gif" class="">
+
+<p>极大似然函数为:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/L_func_logistic_without_log.gif" class="">
+
+<p>取对数后:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/L_func_logistic.gif" class="">
+
+<p>结果就是要最大话上面的公式, 最大化和最小化是等价的, 但一般都会选择转化为最小化. 也就是在上述公式前面添加负号.</p>
+<h3 id="iii-通过梯度下降求解"><a href="#iii-通过梯度下降求解" class="headerlink" title="iii 通过梯度下降求解"></a>iii 通过梯度下降求解</h3><p>要使得最小化下面公式:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_loss_function.png" class="">
+
+<p>采用梯度下降的方式完成.<br>此时通过链式求导, 并且注意利用性质:<br>g(z)的导数为: g(z)*(1 - g(z))<br>手工求解如下(这个地方用到损失函数多求了一个平均):</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/logistic_solution.jpeg" class="">
+
+<p>其中, a为学习率, 当模型训练无法收敛时, 可以尝试将学习率调小</p>
+<h3 id="iiii-正则化"><a href="#iiii-正则化" class="headerlink" title="iiii 正则化"></a>iiii 正则化</h3><p>在目标函数中, 为了防止过拟合, 一般会加入正则项.<br>通常选用的正则项为L1正则和L2正则.<br>这两种正则化的区别是L1正则可以更容易产生稀疏解.</p>
+<h2 id="4-其它"><a href="#4-其它" class="headerlink" title="4.其它"></a>4.其它</h2><p>逻辑回归是一种判别模型, 直接对P(y|x)建模. 生成式模型则是对数据的联合分布建模. 通过贝叶斯公式计算个类别的后验概率, 即:</p>
+<img src="/2017/09/24/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/generative_model.png" class="">
+
+<p>事实上, 当P(x|y)的分布属于指数分布族时, 可以将生成式推导到判别式模型.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag"># 机器学习 逻辑回归 线性回归</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/06/23/virtualenv%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0/" rel="next" title="virtualenv失效原因">
+                  virtualenv失效原因 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alexixu</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
