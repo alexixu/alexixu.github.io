@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="zh-CN" data-astro-cid-z4jru4n3><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>架构整洁之道读书笔记 | Alex&#39; Blog</title><meta name="description" content="以最小的成本构建和维护一个软件系统，满足业务需求（包括当前需求和未来需求）。 1. 忽视好的设计的作用，导致后续维护成本持续增长。 2. 容忍糟糕的代码，为了临时上线。 慢但是稳，是成功的秘诀。要跑的快，先要跑得稳。 1. 行为价值（满足业…"><meta name="author" content="Alexixu"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#17181b" media="(prefers-color-scheme: dark)"><link rel="canonical" href="https://alexixu.github.io/posts/clean-architecture-notes/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/atom+xml" title="Alex' Blog" href="/atom.xml"><link rel="sitemap" href="/sitemap-index.xml"><meta property="og:type" content="article"><meta property="og:title" content="架构整洁之道读书笔记"><meta property="og:description" content="以最小的成本构建和维护一个软件系统，满足业务需求（包括当前需求和未来需求）。 1. 忽视好的设计的作用，导致后续维护成本持续增长。 2. 容忍糟糕的代码，为了临时上线。 慢但是稳，是成功的秘诀。要跑的快，先要跑得稳。 1. 行为价值（满足业…"><meta property="og:url" content="https://alexixu.github.io/posts/clean-architecture-notes/"><meta property="og:site_name" content="Alex' Blog"><meta property="og:locale" content="zh_CN"><meta property="article:published_time" content="2019-09-30T14:07:23+08:00"><script async src="https://www.googletagmanager.com/gtag/js?id=G-J0ZYYDK6Z5"></script><script>(function(){const gaId = "G-J0ZYYDK6Z5";
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', gaId);
+          })();</script><link rel="stylesheet" href="/_astro/BaseLayout.eFsGdDCS.css"><style>.post-header[data-astro-cid-ruv7hgo6]{margin:1rem 0 2.5rem}h1[data-astro-cid-ruv7hgo6]{margin:0;font-size:1.875rem;line-height:1.4}.meta[data-astro-cid-ruv7hgo6]{color:var(--faint);flex-wrap:wrap;align-items:baseline;gap:0 .5rem;margin:.75rem 0 0;font-size:.875rem;display:flex}.meta[data-astro-cid-ruv7hgo6] a[data-astro-cid-ruv7hgo6]{color:var(--muted)}.tags[data-astro-cid-ruv7hgo6]:before,.updated[data-astro-cid-ruv7hgo6]:before{content:"·";margin-right:.5rem}.pager[data-astro-cid-ruv7hgo6]{border-top:1px solid var(--line);grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:4rem;padding-top:1.5rem;font-size:.9375rem;display:grid}.pager[data-astro-cid-ruv7hgo6] a[data-astro-cid-ruv7hgo6]{color:var(--text-strong);line-height:1.6;display:block}.pager[data-astro-cid-ruv7hgo6] a[data-astro-cid-ruv7hgo6]:hover{color:var(--accent);text-decoration:none}.pager[data-astro-cid-ruv7hgo6] span[data-astro-cid-ruv7hgo6]{color:var(--faint);margin-bottom:.2rem;font-size:.8125rem;display:block}.next[data-astro-cid-ruv7hgo6]{text-align:right}@media (width<=640px){h1[data-astro-cid-ruv7hgo6]{font-size:1.5rem}.pager[data-astro-cid-ruv7hgo6]{grid-template-columns:1fr;gap:1rem}.next[data-astro-cid-ruv7hgo6]{text-align:left}}
+</style></head><body data-astro-cid-z4jru4n3><a class="skip-link" href="#main" data-astro-cid-z4jru4n3>跳到正文</a><header class="site-header container" data-astro-cid-nen7h5rs><a class="brand" href="/" data-astro-cid-nen7h5rs>Alex&#39; Blog</a><nav aria-label="主导航" data-astro-cid-nen7h5rs><ul data-astro-cid-nen7h5rs><li data-astro-cid-nen7h5rs><a href="/posts/" aria-current="page" data-astro-cid-nen7h5rs>文章</a></li><li data-astro-cid-nen7h5rs><a href="/fun/" data-astro-cid-nen7h5rs>乐趣</a></li><li data-astro-cid-nen7h5rs><a href="/about/" data-astro-cid-nen7h5rs>关于</a></li></ul></nav></header><main id="main" class="container" data-astro-cid-z4jru4n3><article data-astro-cid-ruv7hgo6><header class="post-header" data-astro-cid-ruv7hgo6><h1 data-astro-cid-ruv7hgo6>架构整洁之道读书笔记</h1><p class="meta" data-astro-cid-ruv7hgo6><time datetime="2019-09-30T14:07:23+08:00" data-astro-cid-ruv7hgo6>2019-09-30</time><span aria-hidden="true" data-astro-cid-ruv7hgo6>·</span><a href="/categories/engineering/" data-astro-cid-ruv7hgo6>工程</a><span class="tags" data-astro-cid-ruv7hgo6>读书笔记</span></p></header><div class="prose" data-astro-cid-ruv7hgo6><h2 id="第一章-什么是架构">第一章 什么是架构</h2>
+<h2 id="架构的目标">架构的目标</h2>
+<p>以最小的成本构建和维护一个软件系统，满足业务需求（包括当前需求和未来需求）。</p>
+<h2 id="常见问题">常见问题</h2>
+<ol>
+<li>忽视好的设计的作用，导致后续维护成本持续增长。</li>
+<li>容忍糟糕的代码，为了临时上线。</li>
+</ol>
+<h2 id="notes">Notes</h2>
+<p>慢但是稳，是成功的秘诀。要跑的快，先要跑得稳。</p>
+<h2 id="第二章-两个价值维度">第二章 两个价值维度</h2>
+<h3 id="软件的价值">软件的价值</h3>
+<ol>
+<li>行为价值（满足业务需求的行为）</li>
+<li>架构价值（软件灵活性，适应后续的需求变更和增加）</li>
+</ol>
+<h3 id="研发人员的职责">研发人员的职责</h3>
+<p>业务肯定认为行为价值更重要，但是软件开发人员应该重视架构价值，因为一个不可变更或者不可维护的软件系统的价值会最终变成0，而一个维护行好的软件系统会持续产生价值。</p>
+<p>业务部门并不对系统的架构价值负责，所以研发人员需要自己平衡好架构价值，并为此负责，与其他部门协调。</p>
+<h2 id="第三章-编程范式">第三章 编程范式</h2>
+<h3 id="结构化编程">结构化编程</h3>
+<p>结构化编程对程序控制权的直接转移进行了限制和规范。</p>
+<p>限制goto</p>
+<h3 id="面向对象编程">面向对象编程</h3>
+<p>对程序控制权的间接转移进行了限制和规范</p>
+<p>限制函数指针的使用（通过多态）</p>
+<h3 id="函数式编程">函数式编程</h3>
+<p>对程序的赋值进行了限制和规范</p>
+<p>不可变性</p>
+<h3 id="note">Note</h3>
+<p>三个编程范式都是限制程序员行为。</p>
+<h2 id="第四章-结构化编程">第四章 结构化编程</h2>
+<p>通过结构化编程，将软件拆分为一个个可推导的单元，通过测试证明这些程序是无法证伪的，则认为程序正确。</p>
+<p>按功能性降解拆分是软件设计的最佳实践之一。</p>
+<h2 id="第五章-面向对象编程">第五章 面向对象编程</h2>
+<h3 id="三大特性">三大特性</h3>
+<ol>
+<li>封装</li>
+<li>继承</li>
+<li>多态</li>
+</ol>
+<p>三个特性并不是面向对象编程的创新，之前就通过其他方式实现，但是需要人为遵守规定。面向对象编程消除了人工遵守的必要，通过语言层面实现多态，更简单和安全。</p>
+<h3 id="多态的作用">多态的作用</h3>
+<ol>
+<li>与具体实现无关</li>
+<li>依赖反转（引入接口）</li>
+</ol>
+<p>通过控制组件的依赖，让高层次策略组件和底层实现组件可以相分离，实现独立部署。</p>
+<h2 id="第六章-函数式编程">第六章 函数式编程</h2>
+<p>通过变量的不可变性，充分利用多线程的好处，同时避免了变量更改导致的竞争问题。</p>
+<p>如果计算和存储无限制的话，不可变性在程序设计中说可行的，例如git版本管理。</p>
+<p>在实际情况中，一般说将可变性隔离起来，将不可变量和可变量隔离到不同的组件当中，用合适的机制（锁，事务）保护可变量。</p>
+<h2 id="第七章-单一职责原则">第七章 单一职责原则</h2>
+<h3 id="定义">定义</h3>
+<p>一个软件模块，只对某一类行为负责，只对一类客户负责。</p>
+<h3 id="note-1">Note</h3>
+<p>单一职责原则主要用于界定函数和类之间的关系，同时，在更高的层面上，比如组件层面，有一个类似的原则，共同闭包原则，在软件架构层面，用于界定架构的边界。</p>
+<h2 id="第八章-开闭原则">第八章 开闭原则</h2>
+<h3 id="定义-1">定义</h3>
+<p>易于扩展，抗拒修改</p>
+<h3 id="note-2">Note</h3>
+<p>高阶组件不因为低阶组件更改而影响</p>
+<p>业务逻辑是核心抽象</p>
+<h2 id="第九章-里氏替换">第九章 里氏替换</h2>
+<h3 id="定义-2">定义</h3>
+<p>所有引用基类的地方必须能透明地使用其子类的对象。</p>
+<p><strong>子类可以扩展父类的功能，但不能改变父类原有的功能。</strong></p>
+<h3 id="note-3">Note</h3>
+<p>违反LSP原则，系统会不得不增加很多复杂的应对机制。比如各种if else语句</p>
+<h2 id="第十章-接口隔离原则">第十章 接口隔离原则</h2>
+<h3 id="定义-3">定义</h3>
+<p>不应该强迫客户依赖于它们不用的方法。</p>
+<p>任何让用户依赖他们不需要的东西都是有害的。</p>
+<h3 id="note-4">Note</h3>
+<p>不必要的功能代码，导致不必要的重新部署和意外的错误。</p>
+<h2 id="第十一章-依赖反转原则">第十一章 依赖反转原则</h2>
+<h3 id="定义-4">定义</h3>
+<p>使得高层次的模块不依赖于低层次的模块的实现细节，依赖关系被颠倒（反转），从而使得低层次模块依赖于高层次模块的需求抽象。</p>
+<h3 id="规定">规定</h3>
+<ol>
+<li>高层次的模块不应该依赖于低层次的模块，两者都应该依赖于抽象接口。</li>
+<li>抽象接口不应该依赖于具体实现。而具体实现则应该依赖于抽象接口。</li>
+</ol>
+<h3 id="note-5">Note</h3>
+<p>接口比实现更稳定</p>
+<p>不可避免地依赖具体实现，比如操作系统，但是这部分很少改动。</p>
+<p>要重点关注经常变动的部分</p>
+<p>使得代码依赖是单向的</p>
+<h2 id="第十二章-组件">第十二章 组件</h2>
+<h3 id="定义-5">定义</h3>
+<p>组件是最小部署单元</p></div></article><nav class="pager" aria-label="上一篇和下一篇" data-astro-cid-ruv7hgo6><div data-astro-cid-ruv7hgo6><a href="/posts/virtualenv-activate-failure/" rel="prev" data-astro-cid-ruv7hgo6><span data-astro-cid-ruv7hgo6>上一篇</span>virtualenv失效原因</a></div><div class="next" data-astro-cid-ruv7hgo6><a href="/posts/python-extension/" rel="next" data-astro-cid-ruv7hgo6><span data-astro-cid-ruv7hgo6>下一篇</span>Python扩展介绍</a></div></nav></main><footer class="site-footer container" data-astro-cid-jo6i4kqk><p data-astro-cid-jo6i4kqk>© 2017–2026 Alexixu</p><p data-astro-cid-jo6i4kqk><a href="/atom.xml" data-astro-cid-jo6i4kqk>RSS</a><span aria-hidden="true" data-astro-cid-jo6i4kqk>·</span><a href="https://github.com/alexixu" rel="me" data-astro-cid-jo6i4kqk>GitHub</a></p></footer></body></html>

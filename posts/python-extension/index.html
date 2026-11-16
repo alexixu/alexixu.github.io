@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="zh-CN" data-astro-cid-z4jru4n3><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Python扩展介绍 | Alex&#39; Blog</title><meta name="description" content="能够被整合或者导入到其它python脚本中运行的代码，都可以称之为扩展。可以用python写一个package作为扩展，也可以通过C/C++或者JAVA等语言为python写扩展。 有以下三个方面 1. 满足新功能等需要 2. 提升性能 3…"><meta name="author" content="Alexixu"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#17181b" media="(prefers-color-scheme: dark)"><link rel="canonical" href="https://alexixu.github.io/posts/python-extension/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/atom+xml" title="Alex' Blog" href="/atom.xml"><link rel="sitemap" href="/sitemap-index.xml"><meta property="og:type" content="article"><meta property="og:title" content="Python扩展介绍"><meta property="og:description" content="能够被整合或者导入到其它python脚本中运行的代码，都可以称之为扩展。可以用python写一个package作为扩展，也可以通过C/C++或者JAVA等语言为python写扩展。 有以下三个方面 1. 满足新功能等需要 2. 提升性能 3…"><meta property="og:url" content="https://alexixu.github.io/posts/python-extension/"><meta property="og:site_name" content="Alex' Blog"><meta property="og:locale" content="zh_CN"><meta property="article:published_time" content="2019-10-07T17:32:32+08:00"><script async src="https://www.googletagmanager.com/gtag/js?id=G-J0ZYYDK6Z5"></script><script>(function(){const gaId = "G-J0ZYYDK6Z5";
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', gaId);
+          })();</script><link rel="stylesheet" href="/_astro/BaseLayout.eFsGdDCS.css"><style>.post-header[data-astro-cid-ruv7hgo6]{margin:1rem 0 2.5rem}h1[data-astro-cid-ruv7hgo6]{margin:0;font-size:1.875rem;line-height:1.4}.meta[data-astro-cid-ruv7hgo6]{color:var(--faint);flex-wrap:wrap;align-items:baseline;gap:0 .5rem;margin:.75rem 0 0;font-size:.875rem;display:flex}.meta[data-astro-cid-ruv7hgo6] a[data-astro-cid-ruv7hgo6]{color:var(--muted)}.tags[data-astro-cid-ruv7hgo6]:before,.updated[data-astro-cid-ruv7hgo6]:before{content:"·";margin-right:.5rem}.pager[data-astro-cid-ruv7hgo6]{border-top:1px solid var(--line);grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:4rem;padding-top:1.5rem;font-size:.9375rem;display:grid}.pager[data-astro-cid-ruv7hgo6] a[data-astro-cid-ruv7hgo6]{color:var(--text-strong);line-height:1.6;display:block}.pager[data-astro-cid-ruv7hgo6] a[data-astro-cid-ruv7hgo6]:hover{color:var(--accent);text-decoration:none}.pager[data-astro-cid-ruv7hgo6] span[data-astro-cid-ruv7hgo6]{color:var(--faint);margin-bottom:.2rem;font-size:.8125rem;display:block}.next[data-astro-cid-ruv7hgo6]{text-align:right}@media (width<=640px){h1[data-astro-cid-ruv7hgo6]{font-size:1.5rem}.pager[data-astro-cid-ruv7hgo6]{grid-template-columns:1fr;gap:1rem}.next[data-astro-cid-ruv7hgo6]{text-align:left}}
+</style></head><body data-astro-cid-z4jru4n3><a class="skip-link" href="#main" data-astro-cid-z4jru4n3>跳到正文</a><header class="site-header container" data-astro-cid-nen7h5rs><a class="brand" href="/" data-astro-cid-nen7h5rs>Alex&#39; Blog</a><nav aria-label="主导航" data-astro-cid-nen7h5rs><ul data-astro-cid-nen7h5rs><li data-astro-cid-nen7h5rs><a href="/posts/" aria-current="page" data-astro-cid-nen7h5rs>文章</a></li><li data-astro-cid-nen7h5rs><a href="/fun/" data-astro-cid-nen7h5rs>乐趣</a></li><li data-astro-cid-nen7h5rs><a href="/about/" data-astro-cid-nen7h5rs>关于</a></li></ul></nav></header><main id="main" class="container" data-astro-cid-z4jru4n3><article data-astro-cid-ruv7hgo6><header class="post-header" data-astro-cid-ruv7hgo6><h1 data-astro-cid-ruv7hgo6>Python扩展介绍</h1><p class="meta" data-astro-cid-ruv7hgo6><time datetime="2019-10-07T17:32:32+08:00" data-astro-cid-ruv7hgo6>2019-10-07</time><span aria-hidden="true" data-astro-cid-ruv7hgo6>·</span><a href="/categories/python/" data-astro-cid-ruv7hgo6>Python</a></p></header><div class="prose" data-astro-cid-ruv7hgo6><h2 id="什么是扩展">什么是扩展？</h2>
+<p>能够被整合或者导入到其它python脚本中运行的代码，都可以称之为扩展。可以用python写一个package作为扩展，也可以通过C/C++或者JAVA等语言为python写扩展。</p>
+<h2 id="为什么需要扩展">为什么需要扩展</h2>
+<p>有以下三个方面</p>
+<ol>
+<li>满足新功能等需要</li>
+<li>提升性能</li>
+<li>增强代码私密性</li>
+</ol>
+<p>一些用python实现不了的功能，需要通过非python代码实现，比如调用GPU等。</p>
+<p>解释型语言的效率相比编译型速度会慢一些，在聚焦到核心代码后，通过扩展可以加速这部分代码。</p>
+<p>同样，解释型语言暴露源代码，扩展可以免于暴露源代码，增加私密性。</p>
+<h2 id="扩展步骤">扩展步骤</h2>
+<p>3个主要步骤</p>
+<ol>
+<li>完成扩展到功能代码实现</li>
+<li>利用样版包装代码</li>
+<li>编译测试</li>
+</ol>
+<h4 id="第一步-完成功能代码实现">第一步 完成功能代码实现</h4>
+<p>此时，可以通过编写main函数的方式，对代码功能性进行测试，保障代码正确性。这边，我给出一个简单的例子：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#include</span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x3C;stdio.h></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#include</span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x3C;stdlib.h></span></span></code></pre></div></article><nav class="pager" aria-label="上一篇和下一篇" data-astro-cid-ruv7hgo6><div data-astro-cid-ruv7hgo6><a href="/posts/clean-architecture-notes/" rel="prev" data-astro-cid-ruv7hgo6><span data-astro-cid-ruv7hgo6>上一篇</span>架构整洁之道读书笔记</a></div><div class="next" data-astro-cid-ruv7hgo6><a href="/posts/tensorflow-install-from-source/" rel="next" data-astro-cid-ruv7hgo6><span data-astro-cid-ruv7hgo6>下一篇</span>Tensorflow2.0源码安装</a></div></nav></main><footer class="site-footer container" data-astro-cid-jo6i4kqk><p data-astro-cid-jo6i4kqk>© 2017–2026 Alexixu</p><p data-astro-cid-jo6i4kqk><a href="/atom.xml" data-astro-cid-jo6i4kqk>RSS</a><span aria-hidden="true" data-astro-cid-jo6i4kqk>·</span><a href="https://github.com/alexixu" rel="me" data-astro-cid-jo6i4kqk>GitHub</a></p></footer></body></html>
